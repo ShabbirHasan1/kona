@@ -111,6 +111,12 @@ where
 
     // Ensure that the post-state matches the claimed post-state.
     if post_commitment != boot.claimed_post_state {
+        tracing::error!(
+            target: "client_interop",
+            "Post state validation failed. Claimed: {}, Actual: {}",
+            boot.claimed_post_state,
+            post_commitment
+        );
         return Err(FaultProofProgramError::InvalidClaim(boot.claimed_post_state, post_commitment));
     }
 
