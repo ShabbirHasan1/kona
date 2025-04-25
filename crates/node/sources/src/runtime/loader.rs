@@ -62,21 +62,27 @@ impl RuntimeLoader {
     ///
     /// # Example
     ///
-    /// ```rust
+    /// ```rust,ignore
+    /// use alloy_primitives::Address;
     /// use kona_genesis::RollupConfig;
     /// use kona_protocol::BlockInfo;
     /// use kona_rpc::ProtocolVersion;
-    /// use kona_runtime::RuntimeLoader;
+    /// use kona_sources::RuntimeLoader;
+    /// use kona_derive::traits::ChainProvider;
     /// use std::sync::Arc;
     /// use url::Url;
     ///
-    /// let l1_eth_rpc = Url::parse("https://docs-demo.quiknode.pro/").unwrap();
-    /// let config = Arc::new(RollupConfig::default());
-    /// let mut loader = RuntimeLoader::new(l1_eth_rpc, config);
-    /// let block_info = BlockInfo::default();
-    /// let runtime_call = loader.load().block_info(block_info);
-    /// let runtime_config = runtime_call.await.unwrap();
-    /// assert_eq!(runtime_config.unsafe_block_signer_address, Address::ZERO);
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let l1_eth_rpc = Url::parse("https://docs-demo.quiknode.pro/").unwrap();
+    ///     let config = Arc::new(RollupConfig::default());
+    ///     let mut loader = RuntimeLoader::new(l1_eth_rpc, config);
+    ///     let num = loader.provider.latest_block_number().await.unwrap();
+    ///     let block_info = loader.provider.block_info_by_number(num).await.unwrap();
+    ///     let runtime_call = loader.load().block_info(block_info);
+    ///     let runtime_config = runtime_call.await.unwrap();
+    ///     assert_eq!(runtime_config.unsafe_block_signer_address, Address::ZERO);
+    /// }
     /// ```
     pub fn load(&mut self) -> RuntimeCall {
         RuntimeCall::new(self.clone())
