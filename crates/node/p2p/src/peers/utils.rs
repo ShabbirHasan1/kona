@@ -31,7 +31,7 @@ pub fn enr_to_multiaddr(enr: &Enr) -> Option<Multiaddr> {
 
     addr.push(Protocol::P2p(libp2p::PeerId::from_public_key(&pub_key)));
 
-    None
+    Some(addr)
 }
 
 /// Converts an uncompressed [`PeerId`] to a [`secp256k1::PublicKey`] by prepending the [`PeerId`]
