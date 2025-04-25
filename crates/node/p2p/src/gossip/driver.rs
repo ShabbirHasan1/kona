@@ -192,7 +192,7 @@ impl GossipDriver {
                 message_id: id,
                 message,
             } => {
-                trace!(target: "gossip", "Received message with topic: {}", message.topic);
+                info!(target: "gossip", "Received message with topic: {}", message.topic);
                 if self.handler.topics().contains(&message.topic) {
                     let (status, payload) = self.handler.handle(message);
                     _ = self
