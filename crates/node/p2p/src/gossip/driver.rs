@@ -204,15 +204,15 @@ impl GossipDriver {
                 }
             }
             libp2p::gossipsub::Event::Subscribed { peer_id, topic } => {
-                trace!(target: "gossip", "Peer: {:?} subscribed to topic: {:?}", peer_id, topic);
+                info!(target: "gossip", "Peer: {:?} subscribed to topic: {:?}", peer_id, topic);
                 // TODO: Metrice a peer subscribing to a topic?
             }
             libp2p::gossipsub::Event::SlowPeer { peer_id, .. } => {
-                trace!(target: "gossip", "Slow peer: {:?}", peer_id);
+                info!(target: "gossip", "Slow peer: {:?}", peer_id);
                 // TODO: Metrice slow peer count
             }
             _ => {
-                trace!(target: "gossip", "Ignoring non-message gossipsub event: {:?}", event)
+                info!(target: "gossip", "Ignoring non-message gossipsub event: {:?}", event)
             }
         }
         None
@@ -222,13 +222,13 @@ impl GossipDriver {
     pub fn handle_event(&mut self, event: SwarmEvent<Event>) -> Option<OpNetworkPayloadEnvelope> {
         if let SwarmEvent::ConnectionEstablished { peer_id, endpoint, .. } = event {
             let peer_count = self.swarm.connected_peers().count();
-            trace!(target: "gossip", "Connection established: {:?} | Peer Count: {}", peer_id, peer_count);
+            info!(target: "gossip", "Connection established: {:?} | Peer Count: {}", peer_id, peer_count);
             crate::set!(PEER_COUNT, peer_count as i64);
             self.peerstore.insert(peer_id, endpoint.get_remote_address().clone());
             return None;
         }
         if let SwarmEvent::OutgoingConnectionError { peer_id, error, .. } = event {
-            trace!(target: "gossip", "Outgoing connection error: {:?}", error);
+            warn!(target: "gossip", "Outgoing connection error: {:?}", error);
             if let Some(id) = peer_id {
                 self.redial(id);
             }
@@ -236,13 +236,13 @@ impl GossipDriver {
         }
         if let SwarmEvent::ConnectionClosed { peer_id, cause, .. } = event {
             let peer_count = self.swarm.connected_peers().count();
-            trace!(target: "gossip", "Connection closed, redialing peer: {:?} | {:?} | Peer Count: {}", peer_id, cause, peer_count);
+            warn!(target: "gossip", "Connection closed, redialing peer: {:?} | {:?} | Peer Count: {}", peer_id, cause, peer_count);
             crate::set!(PEER_COUNT, peer_count as i64);
             self.redial(peer_id);
             return None;
         }
         let SwarmEvent::Behaviour(event) = event else {
-            trace!(target: "gossip", "Ignoring non-behaviour in event handler: {:?}", event);
+            info!(target: "gossip", "Ignoring non-behaviour in event handler: {:?}", event);
             return None;
         };
 
