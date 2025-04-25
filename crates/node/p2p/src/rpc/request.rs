@@ -67,7 +67,7 @@ impl NetRpcRequest {
                     }
                 }
             };
-            let node_id = enr.id().unwrap_or_default();
+            let node_id = enr.node_id().to_string();
 
             // We need to add the local multiaddr to the list of known addresses.
             let mut addresses = crate::enr_to_multiaddr(&enr)

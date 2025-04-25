@@ -1,22 +1,36 @@
 //! Utilities to translate types.
 
-use discv5::{Enr, multiaddr::Protocol};
+use crate::PeerId;
+use discv5::{
+    Enr,
+    enr::{CombinedPublicKey, EnrPublicKey},
+    multiaddr::Protocol,
+};
 use libp2p::Multiaddr;
-
-use super::PeerId;
 
 /// Converts an [`Enr`] into a [`Multiaddr`].
 pub fn enr_to_multiaddr(enr: &Enr) -> Option<Multiaddr> {
-    if let Some(socket) = enr.tcp4_socket() {
+    let mut addr = if let Some(socket) = enr.tcp4_socket() {
         let mut addr = Multiaddr::from(*socket.ip());
         addr.push(Protocol::Tcp(socket.port()));
-        return Some(addr);
-    }
-    if let Some(socket) = enr.tcp6_socket() {
+        addr
+    } else if let Some(socket) = enr.tcp6_socket() {
         let mut addr = Multiaddr::from(*socket.ip());
         addr.push(Protocol::Tcp(socket.port()));
-        return Some(addr);
-    }
+        addr
+    } else {
+        return None;
+    };
+
+    let CombinedPublicKey::Secp256k1(pub_key) = enr.public_key() else {
+        return None;
+    };
+
+    let pub_key = libp2p_identity::secp256k1::PublicKey::try_from_bytes(&pub_key.encode()).ok()?;
+    let pub_key = libp2p_identity::PublicKey::from(pub_key);
+
+    addr.push(Protocol::P2p(libp2p::PeerId::from_public_key(&pub_key)));
+
     None
 }
 
