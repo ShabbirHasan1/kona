@@ -248,7 +248,7 @@ impl GossipDriver {
 
         match event {
             Event::Ping(libp2p::ping::Event { peer, result, .. }) => {
-                trace!(target: "gossip", "Ping from peer: {:?} | Result: {:?}", peer, result);
+                info!(target: "gossip", "Ping from peer: {:?} | Result: {:?}", peer, result);
                 None
             }
             Event::Gossipsub(e) => self.handle_gossipsub_event(e),
