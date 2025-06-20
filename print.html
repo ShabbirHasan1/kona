@@ -265,8 +265,7 @@
   <span class="mdbook-alerts-icon"></span>
   warning
 </p>
-<p><code>kona</code> is in <strong>active development</strong>, and is not yet ready for use in production.
-During development, this book will evolve quickly and may contain inaccuracies.</p>
+<p>This book may contain inaccuracies as it evolves.</p>
 <p>Please <a href="https://github.com/op-rs/kona/issues/new">open an issue</a> if you find any errors or have any suggestions
 for improvements, and also feel free to <a href="https://github.com/op-rs/kona/tree/main/CONTRIBUTING.md">contribute</a> to the project!</p>
 </div>
@@ -306,8 +305,6 @@ for both performance and portability. In contrast with alternative approaches, s
 much smaller binaries, resulting in fewer instructions that need to be executed on the FPVM.
 In addition, this offers developers more low-level control over interactions with the FPVM
 kernel, which can be useful for optimizing performance-critical code.</p>
-<h2 id="development-status"><a class="header" href="#development-status">Development Status</a></h2>
-<p>Kona is currently in <strong>active development</strong>, and is <strong>not</strong> yet ready for use in production.</p>
 <h2 id="contributing"><a class="header" href="#contributing">Contributing</a></h2>
 <p>Contributors are welcome! Please see the <a href="https://github.com/op-rs/kona/tree/main/CONTRIBUTING.md">contributing guide</a> for more information.</p>
 <!-- External -->
@@ -833,8 +830,8 @@ required trait implementations are the providers stubbed with <code>todo!()</cod
 </span><span class="boring">fn main() {
 </span>use std::sync::Arc;
 use kona_genesis::RollupConfig;
-use kona_derive::pipeline::PipelineBuilder;
-use kona_derive::attributes::StatefulAttributesBuilder;
+use kona_derive::PipelineBuilder;
+use kona_derive::StatefulAttributesBuilder;
 
 // The rollup config for your chain.
 let cfg = Arc::new(RollupConfig::default());
@@ -876,8 +873,8 @@ trait is the <a href="https://docs.rs/kona-derive/latest/kona_derive/traits/trai
 </span>use async_trait::async_trait;
 use alloy_primitives::Bytes;
 use kona_protocol::BlockInfo;
-use kona_derive::traits::DataAvailabilityProvider;
-use kona_derive::errors::PipelineResult;
+use kona_derive::DataAvailabilityProvider;
+use kona_derive::PipelineResult;
 
 /// ExampleAvail
 ///
@@ -1877,7 +1874,7 @@ it needs to be decompressed using the respective (de)compression algorithm
 decompressed, the raw data can be <a href="https://docs.rs/kona-protocol/latest/kona_protocol/enum.Batch.html#method.decode">decoded</a> into the <a href="https://docs.rs/kona-protocol/latest/kona_protocol/enum.Batch.html"><code>Batch</code></a>
 type.</p>
 <h2 id="sections"><a class="header" href="#sections">Sections</a></h2>
-<h4 id="core-derviation-types-discussed-above"><a class="header" href="#core-derviation-types-discussed-above">Core Derviation Types (discussed above)</a></h4>
+<h4 id="core-derivation-types-discussed-above"><a class="header" href="#core-derivation-types-discussed-above">Core Derivation Types (discussed above)</a></h4>
 <ul>
 <li><a href="protocol/protocol/./frames.html">Frames</a></li>
 <li><a href="protocol/protocol/./channels.html">Channels</a></li>
@@ -2035,7 +2032,7 @@ L2 chain. It contains the "L1 origin" which is a set of block info for the L1
 block that this L2 block "originated".</p>
 <p>Similarly to the <a href="https://docs.rs/kona-protocol/latest/kona_protocol/struct.BlockInfo.html"><code>BlockInfo</code></a> type, <code>L2BlockInfo</code> is a subset of information
 provided by a block header, used for protocol operations.</p>
-<p><a href="https://docs.rs/kona-protocol/latest/kona_protocol/struct.L2BlockInfo.html"><code>L2BlockInfo</code></a> provides a <a href="https://docs.rs/kona-protocol/latest/kona_protocol/struct.L2BlockInfo.html#method.from_block_and_genesis"><code>from_block_and_gensis</code></a> method to
+<p><a href="https://docs.rs/kona-protocol/latest/kona_protocol/struct.L2BlockInfo.html"><code>L2BlockInfo</code></a> provides a <a href="https://docs.rs/kona-protocol/latest/kona_protocol/struct.L2BlockInfo.html#method.from_block_and_genesis"><code>from_block_and_genesis</code></a> method to
 construct the <a href="https://docs.rs/kona-protocol/latest/kona_protocol/struct.L2BlockInfo.html"><code>L2BlockInfo</code></a> from a block and <code>ChainGenesis</code>.</p>
 <!-- Links -->
 <div style="break-before: page; page-break-before: always;"></div><style>
